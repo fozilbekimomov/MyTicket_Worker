@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MySticker</string>
+    <string name="register_title">Перед началом работы введите свои данные</string>
+    <string name="home_title">Для отправки данных на проверку необходимо сделать фото</string>
+    <string name="latLong">Longitude: %.3f, Latitude: %.3f</string>
+    <string name="enable_gps">Пожалуйста, включите ваш GPS</string>
+    <string name="permission_request">Приложению требуется разрешение на определение местоположения</string>
+    <string name="insert_your_name">Введите свое имя</string>
+    <string name="save_data">Сохранить данные</string>
+    <string name="save_and_start">Сохранить и начать</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="register_error">Вам необходимо выполнить все требования</string>
+</resources>

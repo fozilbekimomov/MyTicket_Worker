@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "357115929166",
+    "project_id": "mysticker-dbbb9",
+    "storage_bucket": "mysticker-dbbb9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357115929166:android:e48a778f14ff2c81c9591f",
+        "android_client_info": {
+          "package_name": "uz.fozilbekimomov.mysticker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357115929166-bd81tc142sp6kt1vh3ldi51kci2gj7du.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.fozilbekimomov.mysticker",
+            "certificate_hash": "075d26a46ccfe522d592810455b5a2e6c4ea6e52"
+          }
+        },
+        {
+          "client_id": "357115929166-62igbv083jg0uuqqb9ad79e0hjtsbjco.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJlJJUakMO30itSTsWJytBkJgTQutIaPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357115929166-62igbv083jg0uuqqb9ad79e0hjtsbjco.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
