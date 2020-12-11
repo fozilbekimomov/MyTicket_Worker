@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
     var sp: SharedPreferences? = null
     var byte: ByteArray? = null
     var locationModel: LocationModel? = null
-    var imageUrl=""
+    var imageUrl = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,21 +81,43 @@ class HomeFragment : Fragment() {
 
         }
 
+        binding.logOut.setOnClickListener {
+//            sp?.edit()?.clear()?.apply()
+//            activity?.onBackPressed()
+        }
+
         binding.sendData.setOnClickListener {
 
-            Log.d(TAG, "onViewCreated: locationModel-> ${locationModel!=null}")
+            Log.d(TAG, "onViewCreated: locationModel-> ${locationModel != null}")
 
-            locationModel?.let {
-                homeViewModel.uploadUserData(
-                    imageUrl,
-                    sp?.getString(USER_NAME, "")!!,
-                    it
-                )
-            }
+            sendData()
+
         }
 
         setObservers()
 
+    }
+
+    private fun sendData() {
+        if (imageUrl.length > 0) {
+
+            locationModel?.let {
+
+                homeViewModel.uploadUserData(
+                    imageUrl,
+                    sp?.getString(USER_NAME, "")!!,
+                    sp?.getString(USER_NUMBER, "")!!,
+                    it
+                )
+            }
+        } else {
+            Snackbar.make(
+                requireView(),
+                getString(R.string.home_title),
+                Snackbar.LENGTH_LONG
+            ).show()
+
+        }
     }
 
     private fun setObservers() {
@@ -103,8 +125,8 @@ class HomeFragment : Fragment() {
         homeViewModel.imageUrl.observe(viewLifecycleOwner, { url ->
 
             Log.d(TAG, "setObservers: $url")
-            binding.progressBar.visibility = View.GONE
-            this.imageUrl=url
+            this.imageUrl = url
+            sendData()
         })
 
 
@@ -117,8 +139,11 @@ class HomeFragment : Fragment() {
         homeViewModel.userData.observe(viewLifecycleOwner, {
 
             Log.d(TAG, "setObservers: $it")
-            Toast.makeText(requireContext(), "Your data saved", Toast.LENGTH_SHORT).show()
-            requireActivity().onBackPressed()
+            Toast.makeText(requireContext(), "Успешно отправлен", Toast.LENGTH_SHORT).show()
+
+            binding.progressLayout.visibility = View.GONE
+
+            binding.homeImage.setImageResource(R.drawable.ic_baseline_image_24)
 
         })
 
@@ -148,14 +173,26 @@ class HomeFragment : Fragment() {
 
             }
 
-            else -> ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                LOCATION_REQUEST
-            )
+            else -> if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                    ),
+                    LOCATION_REQUEST
+                )
+            }else{
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    LOCATION_REQUEST
+                )
+            }
         }
     }
 
@@ -181,14 +218,14 @@ class HomeFragment : Fragment() {
             val imageBitmap = data?.extras?.get("data") as Bitmap
             binding.homeImage.setImageBitmap(imageBitmap)
 
-            binding.sendData.visibility = View.VISIBLE
+//            binding.sendData.visibility = View.VISIBLE
 
             val baos = ByteArrayOutputStream()
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             byte = baos.toByteArray()
 
             byte?.let {
-                binding.progressBar.visibility = View.VISIBLE
+                binding.progressLayout.visibility = View.VISIBLE
                 homeViewModel.uploadImage(it, "${sp?.getString(USER_NAME, "")}")
             }
 

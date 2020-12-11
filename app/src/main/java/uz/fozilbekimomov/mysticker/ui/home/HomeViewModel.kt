@@ -1,7 +1,6 @@
 package uz.fozilbekimomov.mysticker.ui.home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,8 +12,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import uz.fozilbekimomov.mysticker.core.models.LocationModel
+import uz.fozilbekimomov.mysticker.core.models.UserData
+import uz.fozilbekimomov.mysticker.core.utils.DATA_KEY
 import uz.fozilbekimomov.mysticker.core.utils.LocationLiveData
-import uz.fozilbekimomov.mysticker.core.utils.TAG
+import java.util.*
 
 
 /**
@@ -56,12 +57,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
                 riversRef?.putBytes(byteArray)?.apply {
                     addOnSuccessListener {
-
                         val url = it.metadata?.path
                         _imageUrl.postValue(url)
-
                     }
-
                     addOnFailureListener {
 
                         _errorData.postValue(exception?.message)
@@ -74,43 +72,35 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _userData = MutableLiveData<String>()
     val userData: LiveData<String> get() = _userData
-    fun uploadUserData(imageUrl: String, userName: String, location: LocationModel) {
-
-        Log.d(TAG, "uploadUserData:1 ${db != null}")
-
-
+    fun uploadUserData(
+        imageUrl: String,
+        userName: String,
+        phoneNumber: String,
+        location: LocationModel
+    ) {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                val userN = userName.replace(" ", "")
 
-                val userData: MutableMap<String, Any> = HashMap()
+                val userData =
+                    UserData(
+                        userName,
+                        phoneNumber,
+                        Calendar.getInstance().time.time,
+                        imageUrl,
+                        location
+                    )
 
-                userData["userName"] = userName
-                userData["image_url"] = imageUrl
-                userData["lat"] = location.latitude
-                userData["long"] = location.longitude
-
-
-                val collection =
-                    db!!.collection("users")
-                        .document(userN)
-                        .collection("${System.currentTimeMillis()}")
-
-
-                collection.add(userData)
+                db!!.collection(DATA_KEY).add(userData)
                     .addOnSuccessListener { documentReference ->
 
                         _userData.postValue(documentReference.path)
-                        Log.d(TAG, "uploadUserData: ${documentReference.id}")
 
                     }
                     .addOnFailureListener { e ->
-                        Log.d(TAG, "uploadUserData: ${e.message}")
                         _errorData.postValue(e.message)
                     }
             }
 
-            Log.d(TAG, "uploadUserData:2 ${db != null}")
         }
     }
 

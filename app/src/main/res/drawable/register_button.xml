@@ -7,9 +7,9 @@
 
             <corners android:radius="10dp" />
 
-            <stroke android:width="2dp" android:color="#67E9FA" />
+            <stroke android:width="4dp" android:color="#9720A13D" />
 
-            <solid android:color="#2197F6" />
+            <solid android:color="#20A13D" />
 
         </shape>
 
@@ -21,9 +21,9 @@
 
             <corners android:radius="10dp" />
 
-            <stroke android:width="2dp" android:color="#67E9FA" />
+            <stroke android:width="4dp" android:color="#9600731A" />
 
-            <solid android:color="#003B6A" />
+            <solid android:color="#00731A" />
 
         </shape>
 
